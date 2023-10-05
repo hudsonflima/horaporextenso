@@ -34,10 +34,12 @@ const HoraExtenso = () => {
     }
 
     const horaPorExtenso = tempoPorExtenso(horaInt, "hora");
-    const minutoPorExtenso = tempoPorExtenso(minutoInt, "minuto");
+
+    // Adiciona a parte dos minutos apenas se os minutos não forem zero
+    const minutoPorExtenso = minutoInt !== 0 ? ` e ${tempoPorExtenso(minutoInt, "minuto")}` : '';
 
     setHoraExtenso(
-      `${capitalizeFirstLetter(horaPorExtenso)} e ${minutoPorExtenso}`
+      `${capitalizeFirstLetter(horaPorExtenso)}${minutoPorExtenso}`
     );
   };
 
@@ -47,70 +49,46 @@ const HoraExtenso = () => {
 
   const tempoPorExtenso = (n, tipo) => {
     const parte = [
-      "zero",
-      "um",
-      "dois",
-      "três",
-      "quatro",
-      "cinco",
-      "seis",
-      "sete",
-      "oito",
-      "nove",
-      "dez",
-      "onze",
-      "doze",
-      "treze",
-      "quatorze",
-      "quinze",
-      "dezesseis",
-      "dezessete",
-      "dezoito",
-      "dezenove"
+      'zero', 'uma', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
+      'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'
     ];
-
+  
+    const parteMinuto = [
+      '', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
+      'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove',
+      'vinte', 'vinte e um', 'vinte e dois', 'vinte e três', 'vinte e quatro', 'vinte e cinco',
+      'vinte e seis', 'vinte e sete', 'vinte e oito', 'vinte e nove', 'trinta', 'trinta e um',
+      'trinta e dois', 'trinta e três', 'trinta e quatro', 'trinta e cinco', 'trinta e seis',
+      'trinta e sete', 'trinta e oito', 'trinta e nove', 'quarenta', 'quarenta e um', 'quarenta e dois',
+      'quarenta e três', 'quarenta e quatro', 'quarenta e cinco', 'quarenta e seis', 'quarenta e sete',
+      'quarenta e oito', 'quarenta e nove', 'cinquenta', 'cinquenta e um', 'cinquenta e dois',
+      'cinquenta e três', 'cinquenta e quatro', 'cinquenta e cinco', 'cinquenta e seis',
+      'cinquenta e sete', 'cinquenta e oito', 'cinquenta e nove'
+    ];
+  
     const dezena = [
-      "",
-      "",
-      "vinte",
-      "trinta",
-      "quarenta",
-      "cinquenta",
-      "sessenta",
-      "setenta",
-      "oitenta",
-      "noventa"
+      '', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'
     ];
-
+  
+    const dezenaMinuto = [
+      '', 'dez', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'
+    ];
+  
     const centena = [
-      "",
-      "Cento",
-      "Duzentas",
-      "Trezentas",
-      "Quatrocentas",
-      "Quinhentas",
-      "Seiscentas",
-      "Setecentas",
-      "Oitocentas",
-      "Novecentas"
+      '', 'Cento', 'Duzentas', 'Trezentas', 'Quatrocentas', 'Quinhentas', 'Seiscentas', 'Setecentas',
+      'Oitocentas', 'Novecentas'
     ];
-
-    let extenso = "";
-
-    if (n === 0) {
-      extenso = parte[n];
-    } else if (n < 20) {
-      extenso = parte[n]; // Correção aqui
+  
+    let extenso = '';
+  
+    if (n < 20) {
+      extenso = tipo === 'minuto' ? parteMinuto[n] : parte[n];
     } else if (n < 100) {
       const dez = Math.floor(n / 10);
       const unid = n % 10;
-      extenso = dezena[dez];
+      extenso = tipo === 'minuto' ? dezenaMinuto[dez] : dezena[dez];
       if (unid !== 0) {
-        if (tipo === "hora") {
-          extenso += ` e ${parte[unid]}`; // Correção aqui
-        } else if (tipo === "minuto") {
-          extenso += ` e ${parte[unid]}`; // Correção aqui
-        }
+        extenso += dez !== 0 ? ` e ${tipo === 'minuto' ? parteMinuto[unid] : parte[unid]}` : ` ${tipo === 'minuto' ? parteMinuto[unid] : parte[unid]}`;
       }
     } else {
       const cent = Math.floor(n / 100);
@@ -118,35 +96,24 @@ const HoraExtenso = () => {
       const unid = n % 10;
       extenso = centena[cent];
       if (dez !== 0) {
-        extenso += ` e ${dezena[dez]}`;
+        extenso += ` e ${tipo === 'minuto' ? dezenaMinuto[dez] : dezena[dez]}`;
       }
       if (unid !== 0) {
-        if (tipo === "hora") {
-          extenso += ` e ${parte[unid]}`; // Correção aqui
-        } else if (tipo === "minuto") {
-          extenso += ` e ${parte[unid]}`; // Correção aqui
-        }
+        extenso += dez !== 0 ? ` e ${tipo === 'minuto' ? parteMinuto[unid] : parte[unid]}` : ` ${tipo === 'minuto' ? parteMinuto[unid] : parte[unid]}`;
       }
     }
-
-    if (tipo === "hora") {
-      if (n === 1) {
-        extenso = "uma hora";
-      } else {
-        extenso += " horas";
-      }
+  
+    if (tipo === 'hora') {
+      extenso += n === 1 ? ' hora' : ' horas';
     }
-
-    if (tipo === "minuto") {
-      if (n === 1) {
-        extenso = "um minuto";
-      } else {
-        extenso += n > 1 ? " minutos" : " minuto";
-      }
+  
+    if (tipo === 'minuto' && n !== 0) {
+      extenso += n === 1 ? ' minuto' : ' minutos';
     }
-
-    return extenso;
+  
+    return tipo === 'hora' ? extenso.trim() : extenso;
   };
+  
 
   return (
     <div className="container mx-auto max-w-md min-h-[91vh] py-20">
@@ -188,7 +155,7 @@ const HoraExtenso = () => {
               onClick={handleCopyClick}
               title="Clique para copiar..."
             >
-              <AiOutlineCopy size={20} color="darkgreen"/>
+              <AiOutlineCopy size={20} color="darkgreen" />
             </button>
           </p>
         </div>
