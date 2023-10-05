@@ -52,7 +52,7 @@ const HoraExtenso = () => {
       'zero', 'uma', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
       'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'
     ];
-  
+
     const parteMinuto = [
       '', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
       'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove',
@@ -65,22 +65,22 @@ const HoraExtenso = () => {
       'cinquenta e três', 'cinquenta e quatro', 'cinquenta e cinco', 'cinquenta e seis',
       'cinquenta e sete', 'cinquenta e oito', 'cinquenta e nove'
     ];
-  
+
     const dezena = [
       '', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'
     ];
-  
+
     const dezenaMinuto = [
       '', 'dez', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'
     ];
-  
+
     const centena = [
       '', 'Cento', 'Duzentas', 'Trezentas', 'Quatrocentas', 'Quinhentas', 'Seiscentas', 'Setecentas',
       'Oitocentas', 'Novecentas'
     ];
-  
+
     let extenso = '';
-  
+
     if (n < 20) {
       extenso = tipo === 'minuto' ? parteMinuto[n] : parte[n];
     } else if (n < 100) {
@@ -102,18 +102,18 @@ const HoraExtenso = () => {
         extenso += dez !== 0 ? ` e ${tipo === 'minuto' ? parteMinuto[unid] : parte[unid]}` : ` ${tipo === 'minuto' ? parteMinuto[unid] : parte[unid]}`;
       }
     }
-  
+
     if (tipo === 'hora') {
       extenso += n === 1 ? ' hora' : ' horas';
     }
-  
+
     if (tipo === 'minuto' && n !== 0) {
       extenso += n === 1 ? ' minuto' : ' minutos';
     }
-  
+
     return tipo === 'hora' ? extenso.trim() : extenso;
   };
-  
+
 
   return (
     <div className="container mx-auto max-w-md min-h-[91vh] py-20">
@@ -155,7 +155,9 @@ const HoraExtenso = () => {
               onClick={handleCopyClick}
               title="Clique para copiar..."
             >
-              <AiOutlineCopy size={20} color="darkgreen" />
+              <div className="text-green-700 hover:text-green-600 transition-all hover:scale-150">
+                <AiOutlineCopy size={20} />
+              </div>
             </button>
           </p>
         </div>
