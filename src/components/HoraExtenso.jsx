@@ -49,7 +49,7 @@ const HoraExtenso = () => {
 
   const tempoPorExtenso = (n, tipo) => {
     const parte = [
-      'zero', 'uma', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
+      'zero', 'uma', 'duas', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
       'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'
     ];
 
