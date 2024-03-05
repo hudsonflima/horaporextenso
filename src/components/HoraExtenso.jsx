@@ -49,70 +49,55 @@ const HoraExtenso = () => {
 
   const tempoPorExtenso = (n, tipo) => {
     const parte = [
-      'zero', 'uma', 'duas', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
-      'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'
-    ];
-
-    const parteMinuto = [
-      '', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
-      'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove',
-      'vinte', 'vinte e um', 'vinte e dois', 'vinte e três', 'vinte e quatro', 'vinte e cinco',
-      'vinte e seis', 'vinte e sete', 'vinte e oito', 'vinte e nove', 'trinta', 'trinta e um',
-      'trinta e dois', 'trinta e três', 'trinta e quatro', 'trinta e cinco', 'trinta e seis',
-      'trinta e sete', 'trinta e oito', 'trinta e nove', 'quarenta', 'quarenta e um', 'quarenta e dois',
-      'quarenta e três', 'quarenta e quatro', 'quarenta e cinco', 'quarenta e seis', 'quarenta e sete',
-      'quarenta e oito', 'quarenta e nove', 'cinquenta', 'cinquenta e um', 'cinquenta e dois',
-      'cinquenta e três', 'cinquenta e quatro', 'cinquenta e cinco', 'cinquenta e seis',
-      'cinquenta e sete', 'cinquenta e oito', 'cinquenta e nove'
+        'zero', 'uma', 'duas', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez',
+        'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'
     ];
 
     const dezena = [
-      '', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'
-    ];
-
-    const dezenaMinuto = [
-      '', 'dez', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'
+        '', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'
     ];
 
     const centena = [
-      '', 'Cento', 'Duzentas', 'Trezentas', 'Quatrocentas', 'Quinhentas', 'Seiscentas', 'Setecentas',
-      'Oitocentas', 'Novecentas'
+        '', 'cento', 'duzentas', 'trezentas', 'quatrocentas', 'quinhentas', 'seiscentas', 'setecentas',
+        'oitocentas', 'novecentas'
     ];
 
     let extenso = '';
 
     if (n < 20) {
-      extenso = tipo === 'minuto' ? parteMinuto[n] : parte[n];
+        extenso = parte[n];
     } else if (n < 100) {
-      const dez = Math.floor(n / 10);
-      const unid = n % 10;
-      extenso = tipo === 'minuto' ? dezenaMinuto[dez] : dezena[dez];
-      if (unid !== 0) {
-        extenso += dez !== 0 ? ` e ${tipo === 'minuto' ? parteMinuto[unid] : parte[unid]}` : ` ${tipo === 'minuto' ? parteMinuto[unid] : parte[unid]}`;
-      }
+        const dez = Math.floor(n / 10);
+        const unid = n % 10;
+        extenso = dezena[dez];
+        if (unid !== 0) {
+            extenso += unid !== 1 ? ` e ${parte[unid]}` : ` e ${parte[unid]}`;
+        }
     } else {
-      const cent = Math.floor(n / 100);
-      const dez = Math.floor((n % 100) / 10);
-      const unid = n % 10;
-      extenso = centena[cent];
-      if (dez !== 0) {
-        extenso += ` e ${tipo === 'minuto' ? dezenaMinuto[dez] : dezena[dez]}`;
-      }
-      if (unid !== 0) {
-        extenso += dez !== 0 ? ` e ${tipo === 'minuto' ? parteMinuto[unid] : parte[unid]}` : ` ${tipo === 'minuto' ? parteMinuto[unid] : parte[unid]}`;
-      }
+        const cent = Math.floor(n / 100);
+        const dez = Math.floor((n % 100) / 10);
+        const unid = n % 10;
+        extenso = centena[cent];
+        if (dez < 2) {
+            extenso += ` e ${parte[n % 100]}`;
+        } else {
+            extenso += ` e ${dezena[dez]}`;
+            if (unid !== 0) {
+                extenso += ` e ${parte[unid]}`;
+            }
+        }
     }
 
     if (tipo === 'hora') {
-      extenso += n === 1 ? ' hora' : ' horas';
+        extenso += n === 1 ? ' hora' : ' horas';
     }
 
     if (tipo === 'minuto' && n !== 0) {
-      extenso += n === 1 ? ' minuto' : ' minutos';
+        extenso += n === 1 ? ' minuto' : ' minutos';
     }
 
-    return tipo === 'hora' ? extenso.trim() : extenso;
-  };
+    return extenso.trim();
+};
 
 
   return (
