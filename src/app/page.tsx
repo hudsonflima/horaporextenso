@@ -1,11 +1,10 @@
-import "./styles.css";
-import HoraExtenso from "./components/HoraExtenso";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import HoraExtenso from "./components/HoraExtenso";
 
-export default function App() {
+export default function Home() {
   return (
-    <div className="App bg-slate-200">
+    <div className="bg-slate-200">
       <Header />
       <HoraExtenso />
       <Footer />

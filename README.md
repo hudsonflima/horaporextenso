@@ -6,7 +6,7 @@ Esta é uma aplicação que permite aos usuários inserir uma hora no formato "H
 
 1. Clone este repositório em sua máquina local.
 2. Certifique-se de ter as dependências do projeto instaladas usando `npm install` ou `yarn install`.
-3. Inicie o servidor de desenvolvimento usando `npm start` ou `yarn dev`.
+3. Inicie o servidor de desenvolvimento usando `npm run dev` ou `yarn dev`.
 4. Acesse a aplicação em seu navegador em `http://localhost:3000`.
 
 ## Funcionalidades
@@ -17,8 +17,10 @@ Esta é uma aplicação que permite aos usuários inserir uma hora no formato "H
 
 ## Tecnologias Utilizadas
 
-- [React.js](https://nextjs.org/) para a criação da aplicação React.
+- [Next.js](https://nextjs.org/) para a criação da aplicação usando o framework React.
 - [Tailwind CSS](https://tailwindcss.com/) para estilização rápida e responsiva.
+- [TypeScript](https://www.typescriptlang.org/) para proporcionar tipagem estática e melhorar a robustez do código.
+- [React Icons](https://react-icons.github.io/react-icons/) para inclusão de ícones na interface.
 - JavaScript para a lógica de conversão de horas para extenso.
 
 Esperamos que esta aplicação seja útil para gerar leituras por extenso de horas de forma simples e rápida.
