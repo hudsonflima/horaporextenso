@@ -56,8 +56,8 @@ const HoraExtenso: React.FC = () => {
         ];
 
         const centena = [
-            '', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos', 'setecentos',
-            'oitocentos', 'novecentos'
+            '', 'cento', 'duzentas', 'trezentas', 'quatrocentas', 'quinhentas', 'seiscentas', 'setecentas',
+            'oitocentas', 'novecentas'
         ];
 
         let extenso = '';
@@ -140,7 +140,9 @@ const HoraExtenso: React.FC = () => {
                             onClick={handleCopyClick}
                             title="Clique para copiar..."
                         >
-                            <AiOutlineCopy className="text-green-700 hover:text-green-600 transition-colors" size={20} />
+                            <span className="text-green-700 hover:text-green-600 transition-colors">
+                                <AiOutlineCopy size={20} />
+                            </span>
                         </button>
                     </p>
                 </div>
