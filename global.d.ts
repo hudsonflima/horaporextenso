@@ -9,5 +9,7 @@ declare namespace JSX {
         IconType: any;
         form: any;
         span: any;
+        body: any;
+        html: any;
     }
 }
