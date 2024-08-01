@@ -4,7 +4,7 @@ import HoraExtenso from "./components/HoraExtenso";
 
 export default function Home() {
   return (
-    <div className="bg-slate-200">
+    <div className="bg-slate-200 px-16">
       <Header />
       <HoraExtenso />
       <Footer />

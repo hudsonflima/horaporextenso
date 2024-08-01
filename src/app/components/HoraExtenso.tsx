@@ -137,7 +137,7 @@ class HoraExtenso extends Component<{}, State> {
 
     render() {
         return (
-            <div className="container mx-auto max-w-md min-h-[91vh] py-20">
+            <div className="container mx-auto max-w-md h-screen py-20">
                 <form onSubmit={this.handleFormSubmit}>
                     <div className="mb-4">
                         <label
