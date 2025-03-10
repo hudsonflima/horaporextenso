@@ -92,19 +92,22 @@ class HoraExtenso extends Component<{}, State> {
         }
     };*/
 
-    private construirHoraPorExtenso = (hora: number): string => {
-        if (hora === 0) return "Zero horas";
+    private construirHoraPorExtenso = (hora: number, minuto: number): string => {
+        const horaExtenso = this.numeroPorExtenso(hora, false);
+        const minutoExtenso = this.numeroPorExtenso(minuto, true);
     
-        let horaExtenso = this.numeroPorExtenso(hora, false);
+        // Se for exatamente 01:00, usa "hora", senão "horas"
+        const horaPalavra = (hora === 1 && minuto === 0) ? "hora" : "horas";
     
-        if (hora === 1) {
-            return "Uma hora";
-        } else if (hora === 2) {
-            return "Duas horas";
-        } else {
-            return `${horaExtenso} horas`;
+        const minutoPalavra = minuto === 1 ? "minuto" : "minutos";
+    
+        if (minuto === 0) {
+            return `${horaExtenso} ${horaPalavra} em ponto`;
         }
+    
+        return `${horaExtenso} ${horaPalavra} e ${minutoExtenso} ${minutoPalavra}`;
     };
+
 
     /*private numeroPorExtenso = (n: number, isMinuto: boolean): string => {
         let extenso = '';
