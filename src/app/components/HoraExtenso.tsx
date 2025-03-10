@@ -106,7 +106,7 @@ class HoraExtenso extends Component<{}, State> {
         }
     };
 
-    private numeroPorExtenso = (n: number, isMinuto: boolean): string => {
+    /*private numeroPorExtenso = (n: number, isMinuto: boolean): string => {
         let extenso = '';
 
         if (n < 20) {
@@ -142,7 +142,49 @@ class HoraExtenso extends Component<{}, State> {
         }
 
         return extenso.trim();
+    };*/
+
+    private numeroPorExtenso = (n: number, isMinuto: boolean): string => {
+        if (n === 1) return isMinuto ? "um" : "uma";  // Corrige "1" para "uma" quando for hora
+        if (n === 2) return isMinuto ? "dois" : "duas";  // Corrige "2" para "duas" quando for hora
+    
+        let extenso = "";
+    
+        if (n < 20) {
+            extenso = isMinuto ? this.objMinuto[n] : this.objHora[n];
+        } else if (n < 100) {
+            const dez = Math.floor(n / 10);
+            const unid = n % 10;
+            extenso = this.dezena[dez];
+            if (unid !== 0) {
+                extenso += ` e ${isMinuto ? this.objMinuto[unid] : this.objHora[unid]}`;
+            }
+        } else if (n < 1000) {
+            const cent = Math.floor(n / 100);
+            const resto = n % 100;
+    
+            if (n === 100) {
+                extenso = "cem";
+            } else {
+                extenso = this.centena[cent];
+                if (resto > 0) {
+                    if (resto < 20) {
+                        extenso += ` e ${isMinuto ? this.objMinuto[resto] : this.objHora[resto]}`;
+                    } else {
+                        const dez = Math.floor(resto / 10);
+                        const unid = resto % 10;
+                        extenso += ` e ${this.dezena[dez]}`;
+                        if (unid !== 0) {
+                            extenso += ` e ${isMinuto ? this.objMinuto[unid] : this.objHora[unid]}`;
+                        }
+                    }
+                }
+            }
+        }
+    
+        return extenso.trim();
     };
+
 
     private capitalizeFirstLetter = (text: string): string => {
         if (!text) return '';
