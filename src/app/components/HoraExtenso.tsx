@@ -79,20 +79,6 @@ class HoraExtenso extends Component<{}, State> {
         return `${this.numeroPorExtenso(minuto, true)} minutos`;
     };
 
-    /*private construirHoraPorExtenso = (hora: number): string => {
-        if (hora === 0) return "Zero horas";
-
-        const horaExtenso = this.numeroPorExtenso(hora, false);
-
-        if (horaExtenso.endsWith("um")) {
-            return `${horaExtenso.replace("um", "uma")} hora`;
-        } else if (horaExtenso.endsWith("dois")) {
-            return `${horaExtenso.replace("dois", "duas")} horas`;
-        } else {
-            return `${horaExtenso} horas`;
-        }
-    };*/
-
     private construirHoraPorExtenso = (hora: number, minuto: number): string => {
         const horaExtenso = this.numeroPorExtenso(hora, false);
         const minutoExtenso = this.numeroPorExtenso(minuto, true);
@@ -108,45 +94,6 @@ class HoraExtenso extends Component<{}, State> {
         return `${horaExtenso} ${horaPalavra} e ${minutoExtenso} ${minutoPalavra}`;
     };
 
-
-
-    /*private numeroPorExtenso = (n: number, isMinuto: boolean): string => {
-        let extenso = '';
-
-        if (n < 20) {
-            extenso = isMinuto ? this.objMinuto[n] : this.objHora[n];
-        } else if (n < 100) {
-            const dez = Math.floor(n / 10);
-            const unid = n % 10;
-            extenso = this.dezena[dez];
-            if (unid !== 0) {
-                extenso += ` e ${isMinuto ? this.objMinuto[unid] : this.objHora[unid]}`;
-            }
-        } else if (n < 1000) {
-            const cent = Math.floor(n / 100);
-            const resto = n % 100;
-
-            if (n === 100) {
-                extenso = "cem";
-            } else {
-                extenso = this.centena[cent];
-                if (resto > 0) {
-                    if (resto < 20) {
-                        extenso += ` e ${isMinuto ? this.objMinuto[resto] : this.objHora[resto]}`;
-                    } else {
-                        const dez = Math.floor(resto / 10);
-                        const unid = resto % 10;
-                        extenso += ` e ${this.dezena[dez]}`;
-                        if (unid !== 0) {
-                            extenso += ` e ${isMinuto ? this.objMinuto[unid] : this.objHora[unid]}`;
-                        }
-                    }
-                }
-            }
-        }
-
-        return extenso.trim();
-    };*/
 
     private numeroPorExtenso = (n: number, isMinuto: boolean): string => {
         if (n === 1) return isMinuto ? "um" : "uma";  // Corrige "1" para "uma" quando for hora
