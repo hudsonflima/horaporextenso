@@ -1,265 +1,129 @@
 'use client';
-import React, { ChangeEvent, FormEvent, Component } from 'react';
+
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { AiOutlineCopy } from 'react-icons/ai';
 
-interface State {
-	horaCompleta: string;
-	horaExtenso: string;
+const horas = [
+  '', 'uma', 'duas', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove',
+  'dez', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'
+];
+
+const minutos = [
+  '', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove',
+  'dez', 'onze', 'doze', 'treze', 'quatorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'
+];
+
+const dezenas = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta'];
+
+function numeroPorExtenso(n: number, isMinuto: boolean): string {
+  if (n === 1) return isMinuto ? 'um' : 'uma';
+  if (n === 2) return isMinuto ? 'dois' : 'duas';
+
+  if (n < 20) return isMinuto ? minutos[n] : horas[n];
+
+  const dez = Math.floor(n / 10);
+  const unid = n % 10;
+  let resultado = dezenas[dez];
+
+  if (unid > 0) {
+    resultado += ` e ${isMinuto ? minutos[unid] : horas[unid]}`;
+  }
+
+  return resultado;
 }
 
-class HoraExtenso extends Component<{}, State> {
-	private objHora: string[] = [
-		'',
-		'uma',
-		'duas',
-		'três',
-		'quatro',
-		'cinco',
-		'seis',
-		'sete',
-		'oito',
-		'nove',
-		'dez',
-		'onze',
-		'doze',
-		'treze',
-		'quatorze',
-		'quinze',
-		'dezesseis',
-		'dezessete',
-		'dezoito',
-		'dezenove',
-	];
+function construirHoraPorExtenso(hora: number, minuto: number): string {
+	if (hora === 0 && minuto === 0) return 'Zero hora';
+	if (hora === 0 && minuto === 1) return 'Um minuto';
+	if (hora === 0) return `${numeroPorExtenso(minuto, true)} minutos`;
+	if (minuto === 0) return `${numeroPorExtenso(hora, false)} ${hora === 1 ? 'hora' : 'horas'}`;
+  
+	return `${numeroPorExtenso(hora, false)} ${hora === 1 ? 'hora' : 'horas'} e ${numeroPorExtenso(minuto, true)} ${minuto === 1 ? 'minuto' : 'minutos'}`;
+  }
 
-	private objMinuto: string[] = [
-		'',
-		'um',
-		'dois',
-		'três',
-		'quatro',
-		'cinco',
-		'seis',
-		'sete',
-		'oito',
-		'nove',
-		'dez',
-		'onze',
-		'doze',
-		'treze',
-		'quatorze',
-		'quinze',
-		'dezesseis',
-		'dezessete',
-		'dezoito',
-		'dezenove',
-	];
-
-	private dezena: string[] = [
-		'',
-		'',
-		'vinte',
-		'trinta',
-		'quarenta',
-		'cinquenta',
-		'sessenta',
-		'setenta',
-		'oitenta',
-		'noventa',
-	];
-
-	private centena: string[] = [
-		'',
-		'cento',
-		'duzentas',
-		'trezentas',
-		'quatrocentas',
-		'quinhentas',
-		'seiscentas',
-		'setecentas',
-		'oitocentas',
-		'novecentas',
-	];
-
-	constructor(props: {}) {
-		super(props);
-		this.state = {
-			horaCompleta: '',
-			horaExtenso: '',
-		};
-	}
-
-	handleCopyClick = () => {
-		console.log('Texto a ser copiado:', this.state.horaExtenso);
-		navigator.clipboard.writeText(this.state.horaExtenso);
-	};
-
-	handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-		this.setState({ horaCompleta: event.target.value });
-	};
-
-	handleFormSubmit = (event: FormEvent) => {
-		event.preventDefault();
-
-		const [hora, minuto] = this.state.horaCompleta.split(':');
-		const horaInt = parseInt(hora, 10);
-		const minutoInt = parseInt(minuto, 10);
-
-		if (
-			isNaN(horaInt) ||
-			horaInt < 0 ||
-			isNaN(minutoInt) ||
-			minutoInt < 0 ||
-			minutoInt > 59
-		) {
-			alert('Digite uma hora válida no formato HH:MM.');
-			return;
-		}
-
-		// Agora passamos os dois argumentos corretamente
-		const horaPorExtenso = this.construirHoraPorExtenso(horaInt, minutoInt);
-		const minutoPorExtenso = this.construirMinutoPorExtenso(minutoInt);
-
-		this.setState({
-			horaExtenso: this.capitalizeFirstLetter(
-				`${horaPorExtenso}${
-					minutoPorExtenso ? `` : ''
-				}`,
-			),
-		});
-	};
-
-	private construirMinutoPorExtenso = (minuto: number): string => {
-		if (minuto === 0) return '';
-		if (minuto === 1) return 'um minuto';
-
-		return `${this.numeroPorExtenso(minuto, true)} minutos`;
-	};
-
-	private construirHoraPorExtenso = (
-		hora: number,
-		minuto: number,
-	): string => {
-		const horaExtenso = this.numeroPorExtenso(hora, false);
-		const minutoExtenso = this.numeroPorExtenso(minuto, true);
-
-		const horaPalavra = hora === 1 ? 'hora' : 'horas';
-		const minutoPalavra = minuto === 1 ? 'minuto' : 'minutos';
-
-		if (minuto === 0) {
-			return `${horaExtenso} ${horaPalavra}`; // Se for 01:00, retorna apenas "Uma hora"
-		}
-
-		return `${horaExtenso} ${horaPalavra} e ${minutoExtenso} ${minutoPalavra}`;
-	};
-
-	private numeroPorExtenso = (n: number, isMinuto: boolean): string => {
-		if (n === 1) return isMinuto ? 'um' : 'uma'; // Corrige "1" para "uma" quando for hora
-		if (n === 2) return isMinuto ? 'dois' : 'duas'; // Corrige "2" para "duas" quando for hora
-
-		let extenso = '';
-
-		if (n < 20) {
-			extenso = isMinuto ? this.objMinuto[n] : this.objHora[n];
-		} else if (n < 100) {
-			const dez = Math.floor(n / 10);
-			const unid = n % 10;
-			extenso = this.dezena[dez];
-			if (unid !== 0) {
-				extenso += ` e ${
-					isMinuto ? this.objMinuto[unid] : this.objHora[unid]
-				}`;
-			}
-		} else if (n < 1000) {
-			const cent = Math.floor(n / 100);
-			const resto = n % 100;
-
-			if (n === 100) {
-				extenso = 'cem';
-			} else {
-				extenso = this.centena[cent];
-				if (resto > 0) {
-					if (resto < 20) {
-						extenso += ` e ${
-							isMinuto
-								? this.objMinuto[resto]
-								: this.objHora[resto]
-						}`;
-					} else {
-						const dez = Math.floor(resto / 10);
-						const unid = resto % 10;
-						extenso += ` e ${this.dezena[dez]}`;
-						if (unid !== 0) {
-							extenso += ` e ${
-								isMinuto
-									? this.objMinuto[unid]
-									: this.objHora[unid]
-							}`;
-						}
-					}
-				}
-			}
-		}
-
-		return extenso.trim();
-	};
-
-	private capitalizeFirstLetter = (text: string): string => {
-		if (!text) return '';
-		return text.charAt(0).toUpperCase() + text.slice(1);
-	};
-
-	render() {
-		return (
-			<div className='container mx-auto max-w-md h-screen py-20'>
-				<form onSubmit={this.handleFormSubmit}>
-					<div className='mb-4'>
-						<label
-							htmlFor='horaInput'
-							className='block text-gray-700 items-center text-sm font-semibold mb-2'
-						>
-							Digite a hora (HH:MM):
-						</label>
-						<input
-							type='text'
-							id='horaInput'
-							className='whitespace-nowrap bg-gray-100 border border-blue-300 text-gray-900 items-center text-center text-sm rounded-lg focus:ring-blue-500 focus:border-gray-400 block w-full p-2.5'
-							placeholder='Insira a hora desejada...'
-							required
-							value={this.state.horaCompleta}
-							onChange={this.handleInputChange}
-						/>
-					</div>
-					<div className='flex justify-center'>
-						<button
-							type='submit'
-							className='bg-green-800 transition-all hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg'
-						>
-							Gerar Tempo por Extenso
-						</button>
-					</div>
-				</form>
-				{this.state.horaExtenso && (
-					<div className='mt-8'>
-						<p className='text-center font-bold'>
-							Resultado por extenso:
-						</p>
-						<p className='text-center border rounded-xl flex flex-1 p-2 pl-5 pr-5 items-center justify-between border-gray-300 text-gray-800'>
-							{this.state.horaExtenso}
-							<button
-								className='ml-2 focus:outline-none border border-green-600 rounded-md p-1'
-								onClick={this.handleCopyClick}
-								title='Clique para copiar...'
-							>
-								<span className='text-green-700 hover:text-green-600 transition-colors'>
-									<AiOutlineCopy size={20} />
-								</span>
-							</button>
-						</p>
-					</div>
-				)}
-			</div>
-		);
-	}
+function capitalizeFirstLetter(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
+
+const HoraExtenso: React.FC = () => {
+  const [horaCompleta, setHoraCompleta] = useState('');
+  const [horaExtenso, setHoraExtenso] = useState('');
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setHoraCompleta(e.target.value);
+  };
+
+  const handleFormSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!/^\d{2}:\d{2}$/.test(horaCompleta)) {
+      alert('Formato inválido. Use HH:MM.');
+      return;
+    }
+
+    const [horaStr, minutoStr] = horaCompleta.split(':');
+    const hora = parseInt(horaStr, 10);
+    const minuto = parseInt(minutoStr, 10);
+
+    if (isNaN(hora) || isNaN(minuto) || hora < 0 || hora > 23 || minuto < 0 || minuto > 59) {
+      alert('Digite uma hora válida entre 00:00 e 23:59.');
+      return;
+    }
+
+    const texto = capitalizeFirstLetter(construirHoraPorExtenso(hora, minuto));
+    setHoraExtenso(texto);
+  };
+
+  const handleCopyClick = () => {
+    if (!horaExtenso) return;
+    navigator.clipboard.writeText(horaExtenso).then(() => {
+      console.log('Texto copiado:', horaExtenso);
+    }).catch(err => console.error('Erro ao copiar:', err));
+  };
+
+  return (
+    <div className='container mx-auto max-w-md h-screen py-20'>
+      <form onSubmit={handleFormSubmit}>
+        <div className='mb-4'>
+          <label htmlFor='horaInput' className='block text-gray-700 text-sm font-semibold mb-2'>
+            Digite a hora (HH:MM):
+          </label>
+          <input
+            type='text'
+            id='horaInput'
+            placeholder='Insira a hora desejada...'
+            required
+            value={horaCompleta}
+            onChange={handleInputChange}
+            className='bg-gray-100 border border-blue-300 text-gray-900 text-center text-sm rounded-lg focus:ring-blue-500 focus:border-gray-400 block w-full p-2.5'
+          />
+        </div>
+        <div className='flex justify-center'>
+          <button type='submit' className='bg-green-800 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition-all'>
+            Gerar Tempo por Extenso
+          </button>
+        </div>
+      </form>
+
+      {horaExtenso && (
+        <div className='mt-8'>
+          <p className='text-center font-bold'>Resultado por extenso:</p>
+          <p className='text-center border rounded-xl flex flex-1 p-2 pl-5 pr-5 items-center justify-between border-gray-300 text-gray-800'>
+            {horaExtenso}
+            <button
+              className='ml-2 focus:outline-none border border-green-600 rounded-md p-1'
+              onClick={handleCopyClick}
+              title='Clique para copiar...'
+            >
+              <span className='text-green-700 hover:text-green-600 transition-colors'>
+                <AiOutlineCopy size={20} />
+              </span>
+            </button>
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default HoraExtenso;
